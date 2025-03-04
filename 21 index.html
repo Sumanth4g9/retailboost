@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetailBoost - Ramulu Kirana Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        #logo {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        input, button {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .hidden {
+            display: none;
+        }
+        .scratch-area {
+            width: 200px;
+            height: 100px;
+            background: gray;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 100px;
+            margin: 10px auto;
+        }
+        .spin-wheel {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #ffcc00, #ff6600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+        }
+        .result-message {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .discount-message {
+            color: red;
+        }
+        .visit-again {
+            color: blue;
+            font-style: italic;
+        }
+        .welcome-message {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <img id="logo" src="retailboost-logo.jpg" alt="RetailBoost Logo">
+    <h2 class="welcome-message">Welcome to Ramulu Kirana Store</h2>
+    <p style="font-style: italic;">Your Trusted Partner in Savings</p>
+    <div class="container" id="form-container">
+        <h3>Enter Your Details</h3>
+        <input type="text" id="name" placeholder="Enter your name">
+        <input type="tel" id="phone" placeholder="Enter your phone number" maxlength="10">
+        <input type="number" id="bill" placeholder="Enter your bill amount">
+        <button onclick="submitDetails()" style="background: #ff6600; color: white;">Enter</button>
+        <p id="error-message" style="color: red; display: none;">Invalid phone number</p>
+    </div>
+
+    <div id="scratch-section" class="hidden">
+        <h3>Ready to Scratch Your Luck?</h3>
+        <div class="scratch-area" onclick="revealDiscount()">Scratch Here</div>
+        <p class="result-message hidden discount-message" id="discount-message"></p>
+        <p id="final-bill" class="hidden"></p>
+        <p id="visits-left">Only <span id="visit-count">5</span> visits left for spin</p>
+    </div>
+
+    <div id="spin-section" class="hidden">
+        <h3>Try Your Luck on the Spin Wheel!</h3>
+        <div class="spin-wheel" onclick="spinWheel()">SPIN</div>
+        <p class="result-message hidden" id="spin-message"></p>
+    </div>
+
+    <p id="visit-again-message" class="hidden visit-again"></p>
+
+    <script>
+        let visitCount = 5;
+        function submitDetails() {
+            let name = document.getElementById('name').value;
+            let phone = document.getElementById('phone').value;
+            let bill = document.getElementById('bill').value;
+            if (phone.length !== 10) {
+                document.getElementById('error-message').style.display = 'block';
+                return;
+            }
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('scratch-section').classList.remove('hidden');
+        }
+        function revealDiscount() {
+            let name = document.getElementById('name').value;
+            let bill = parseFloat(document.getElementById('bill').value);
+            let discountPercentage = Math.random() > 0.5 ? 10 : 5;
+            let discountAmount = (bill * discountPercentage) / 100;
+            let finalAmount = bill - discountAmount;
+            document.getElementById('discount-message').innerText = `Congratulations ${name}! You got ${discountPercentage}% Discount!`;
+            document.getElementById('discount-message').classList.remove('hidden');
+            document.getElementById('final-bill').innerText = `Original Amount: ₹${bill.toFixed(2)} | Final Amount to Pay: ₹${finalAmount.toFixed(2)}`;
+            document.getElementById('final-bill').classList.remove('hidden');
+            document.getElementById('visit-again-message').innerText = `Thank you for shopping with us, ${name}! Visit again! - Ramulu Kirana Store`;
+            document.getElementById('visit-again-message').classList.remove('hidden');
+            document.getElementById('spin-section').classList.remove('hidden');
+        }
+        function spinWheel() {
+            if (visitCount <= 0) {
+                alert("No more spins left!");
+                return;
+            }
+            visitCount--;
+            document.getElementById('visit-count').innerText = visitCount;
+            let rewards = [
+                "50% Discount on Your Cart",
+                "20% Discount on Your Cart",
+                "Extra Scratch Card",
+                "2+2% Discount on Your Present Cart Value",
+                "Better Luck Next Time"
+            ];
+            let reward = rewards[Math.floor(Math.random() * rewards.length)];
+            document.getElementById('spin-message').innerText = `You won: ${reward}`;
+            document.getElementById('spin-message').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
